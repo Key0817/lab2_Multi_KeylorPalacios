@@ -44,11 +44,13 @@ export default function Productos() {
 
     return (
         <View style={styles.container}>
-            <ImageBackground source={require('../assets/imagenes/img_fondo.jpg')} style={styles.background}></ImageBackground>
+            <ImageBackground source={require('../assets/imagenes/image2.png')} style={styles.background}></ImageBackground>
+
+            <Image source={require('../assets/imagenes/logo_fruit-sf.png')} style={styles.logo} />
+
             <View style={styles.card}>
 
                 <Text style={styles.titulo}>Productos</Text>
-
                 <TextInput
                     onChangeText={(value) => HandleChangeText(value, 'nombreCompleto')}
                     value={estado.nombreCompleto}
@@ -97,9 +99,8 @@ export default function Productos() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
-
     },
+
     background: {
         flex: 1,
         borderTopStartRadius: 20,
@@ -107,6 +108,14 @@ const styles = StyleSheet.create({
         borderBottomStartRadius: 20,
         borderBottomEndRadius: 20,
         zIndex: -1,
+    },
+
+    logo: {
+        width: 130,
+        height: 120,
+        position: 'absolute',
+        top: 16,
+        right: 8,
     },
 
     card: {
@@ -134,6 +143,12 @@ const styles = StyleSheet.create({
     },
 
     inputTxt: {
+        shadowColor: '#000',
+        textShadowOffset: {width:0, height: 2},
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        borderColor: 'gray',
         backgroundColor: "#fff",
         borderTopStartRadius: 20,
         borderTopEndRadius: 20,
@@ -144,8 +159,6 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         marginLeft: 'auto',
         marginBottom: 10,
-
-
     },
 
     btnIniciarSesion: {
@@ -164,7 +177,10 @@ const styles = StyleSheet.create({
         top: 30,
         marginTop: 'auto',
         marginBottom: 'auto',
-
+        shadowColor: '#000',
+        textShadowOffset: {width:0, height: 2},
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
-
 });

@@ -9,16 +9,17 @@ export default function Acceso() {
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/imagenes/img_fondo.jpg')} style={styles.background}>
+                <View style={{backgroundColor: "rgba(0, 0, 0, 0.75)", flex:1}}>
+                    <Image source={require('../assets/imagenes/logo_fruit-sf.png')} style={styles.logo} />
+                    <View style={styles.card}>
+                        <TouchableOpacity onPress={() => navigation.navigate("create")}>
+                            <Text style={styles.btnIniciarSesion}>Crear Cuenta</Text>
+                        </TouchableOpacity>
 
-                {/* <Image source={require('../assets/imagenes/logo_fruit.png')} width={50} height={50} style={styles.logo}/> */}
-                <View style={styles.card}>
-                    <TouchableOpacity onPress={() => navigation.navigate("create")}>
-                        <Text style={styles.btnIniciarSesion}>Crear Cuenta</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={() => navigation.navigate("products")}>
-                        <Text style={styles.btnIniciarSesion}>Registrar Producto</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate("products")}>
+                            <Text style={styles.btnIniciarSesion}>Registrar Producto</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </ImageBackground>
         </View>
@@ -31,16 +32,14 @@ export default function Acceso() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
-
     },
+
     background: {
         flex: 1,
         resizeMode: 'cover',
     },
 
-    card:{
-        backgroundColor: '#D9D9D9',
+    card: {
         borderTopStartRadius: 20,
         borderTopEndRadius: 20,
         borderBottomStartRadius: 20,
@@ -51,15 +50,17 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         height: 162,
         width: 200,
-    
     },
 
     logo: {
-        resizeMode: 'cover',
+        width: 130,
+        height: 120,
+        position: 'absolute',
+        top: 16,
+        right: 8,
     },
 
     btnIniciarSesion: {
-
         backgroundColor: "#871F1F",
         color: "#fff",
         fontSize: 18,
@@ -73,7 +74,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 20,
         marginTop: 20,
-
-
+        shadowColor: '#000',
+        textShadowOffset: {width:0, height: 2},
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
 });
