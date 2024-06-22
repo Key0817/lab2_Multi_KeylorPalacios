@@ -7,6 +7,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Acceso from "./components/access";
 import Crear from "./components/create";
 import Productos from "./components/products";
+import HomePage from "./components/principal";
+import ListProducts from "./components/listaProducts";
+import MostrarProducto from "./components/mostrarProducto";
 
 const StackNav = createStackNavigator();
 
@@ -18,6 +21,9 @@ function Stacks() {
         <StackNav.Screen name="access" component={Acceso} />
         <StackNav.Screen name="create" component={Crear} />
         <StackNav.Screen name="products" component={Productos} />
+        <StackNav.Screen name="home" component={HomePage} />
+        <StackNav.Screen name="listProducts" component={ListProducts} />
+        <StackNav.Screen name="mostrarProducto" component={MostrarProducto} />
       </StackNav.Navigator>
     );
   }

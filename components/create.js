@@ -34,9 +34,7 @@ export default function Crear() {
 
         try {
             await addDoc(collection(db, 'User'), { ...estado })
-
-            Alert.alert('Alerta', 'El usuario se registró con éxito')
-
+            navigation.navigate('home')
         } catch {
             console.error(error)
         }

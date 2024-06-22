@@ -16,8 +16,8 @@ export default function Acceso() {
                             <Text style={styles.btnIniciarSesion}>Crear Cuenta</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => navigation.navigate("products")}>
-                            <Text style={styles.btnIniciarSesion}>Registrar Producto</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate("home")}>
+                            <Text style={styles.btnIniciarSesion}>Ingresar</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

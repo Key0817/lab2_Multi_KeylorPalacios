@@ -35,9 +35,9 @@ export default function Productos() {
         try {
             await addDoc(collection(db, 'Product'), { ...estado })
 
-            Alert.alert('Alerta', 'El usuario se registró con éxito')
+            navigation.navigate('home')
 
-        } catch {
+        } catch (error){
             console.error(error)
         }
     }
