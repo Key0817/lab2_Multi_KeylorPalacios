@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import { TextInput } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import { ActivityIndicator, TextInput } from "react-native-paper";
+import { useNavigation, useFocusEffect  } from "@react-navigation/native";
 import { ImageBackground } from 'react-native';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -16,38 +16,53 @@ export default function ListProducts(props) {
 
     //variable para guardar la navegación
     const navigation = useNavigation()
-
+    const [loading, setLoading] = useState(true)
     const [listar, setListar] = useState([])
 
-    useEffect(() => {
-        const getListar = async () => {
-            try {
-                const qyCollection = await getDocs(collection(db, 'Product'))
-                const Products = []
-                qyCollection.forEach((product) => {
-                    const { nombreCompleto, codigo, cantidad, fcadu } = product.data()
-                    Products.push({
-                        id: product.id,
-                        nombreCompleto,
-                        codigo,
-                        cantidad,
-                        fcadu
-                    })
-                })
-                setListar(Products);
-            } catch (error) {
-                console.log(error)
-            }
+    const getListar = async () => {
+        try {
+          const qyCollection = await getDocs(collection(db, 'Product'));
+          const Products = [];
+          qyCollection.forEach((product) => {
+            const { nombreCompleto, codigo, cantidad, fcadu } = product.data();
+            Products.push({
+              id: product.id,
+              nombreCompleto,
+              codigo,
+              cantidad,
+              fcadu
+            });
+          });
+          setListar(Products);
+          setLoading(false);
+        } catch (error) {
+          console.log(error);
+          setLoading(false);
         }
-        getListar()
-    }, [listar])
+      };
+    
+      useFocusEffect(
+        React.useCallback(() => {
+          setLoading(true);
+          getListar();
+        }, [])
+      );
+
+    if (loading) {
+        return(
+            <View style={{marginTop: '80%', marginLeft: 'auto', marginRight: 'auto'}}>
+                <Text style={{marginBottom: 15, fontSize:20}}>CARGANDO...</Text>
+                <ActivityIndicator size={70} color='#871F1F' style={{marginTop: 15}}/>
+            </View>
+        )
+    }
 
     return (
         <View style={styles.container}>
             <ImageBackground source={require('../assets/imagenes/image2.png')} style={styles.background}></ImageBackground>
-            
+
             <Image source={require('../assets/imagenes/logo_fruit-sf.png')} style={styles.logo} />
- 
+
             <View style={styles.card} >
                 <Text style={styles.titulo}>Lista de Productos</Text>
                 <Text style={styles.subtitulo}>A continuacion se listarán los productos que hay actualmente</Text>
@@ -65,7 +80,6 @@ export default function ListProducts(props) {
                                     </TouchableOpacity>
                                 </View>
 
-
                             ))
                         }
                     </ScrollView>
@@ -76,11 +90,10 @@ export default function ListProducts(props) {
                     <Text style={styles.btnIniciarSesion}>Volver</Text>
                 </TouchableOpacity>
 
-
             </View>
 
         </View>
-       
+
     );
 }
 
@@ -134,7 +147,7 @@ const styles = StyleSheet.create({
         height: 'auto',
         marginRight: 'auto',
         marginLeft: 'auto',
- 
+        bottom: 60,
     },
 
     btnIniciarSesion: {

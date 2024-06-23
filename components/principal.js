@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ImageBackground } from 'react-native';
@@ -8,6 +8,8 @@ export default function HomePage() {
 
     //variable para guardar la navegación
     const navigation = useNavigation()
+
+
 
     return (
         <View style={styles.container}>
@@ -29,7 +31,7 @@ export default function HomePage() {
                         <Text style={styles.btnIniciarSesion}>Listar Productos</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={()=>navigation.navigate('aprender')}>
                         <Text style={styles.btnIniciarSesion}>Aprender +</Text>
                     </TouchableOpacity>
                 </View>

@@ -10,6 +10,8 @@ import Productos from "./components/products";
 import HomePage from "./components/principal";
 import ListProducts from "./components/listaProducts";
 import MostrarProducto from "./components/mostrarProducto";
+import ApiAprender from "./components/aprender";
+
 
 const StackNav = createStackNavigator();
 
@@ -24,6 +26,7 @@ function Stacks() {
         <StackNav.Screen name="home" component={HomePage} />
         <StackNav.Screen name="listProducts" component={ListProducts} />
         <StackNav.Screen name="mostrarProducto" component={MostrarProducto} />
+        <StackNav.Screen name="aprender" component={ApiAprender} />
       </StackNav.Navigator>
     );
   }

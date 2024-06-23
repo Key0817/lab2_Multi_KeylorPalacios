@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
-import { TextInput } from "react-native-paper";
+import { View, Image, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from "react-native";
+import { TextInput, ActivityIndicator } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { ImageBackground } from 'react-native';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 //import DB
-import { addDoc, collection, getFirestore, getDocs, deleteDoc, doc, setDoc, getDoc } from "firebase/firestore";
+import { addDoc, collection, getFirestore, getDocs, deleteDoc, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import app from "../AccesoFirebase";
+import Productos from './products';
+import firebase from 'firebase/compat/app';
 
 
 const db = getFirestore(app)
@@ -17,12 +19,20 @@ export default function MostrarProducto(props) {
     //variable para guardar la navegación
     const navigation = useNavigation()
 
-    const [product, setProduct] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    const [product, setProduct] = useState([{
+        nombreCompleto: '',
+        codigo: '',
+        cantidad: '',
+        fcadu: '',
+    }])
     const getProduct = async (id) => {
         try {
             const ref = doc(db, 'Product', id)
             const datos = await getDoc(ref)
             setProduct(datos.data())
+            setLoading(false)
         } catch (error) {
             console.log(error);
         }
@@ -36,9 +46,30 @@ export default function MostrarProducto(props) {
         await deleteDoc(doc(db, 'Product', id))
         props.navigation.navigate('listProducts')
     }
-    const actualizarProducto = async (id) => {
-        await setDoc(doc(db, 'Product', id))
+
+    const aviso = (id) => {
+        Alert.alert(`Eliminar ${product.nombreCompleto}`, '¿Quieres eliminar este producto?', [
+            { text: 'Eliminar', style: 'destructive', onPress: () => eliminarProducto(id) },
+            { text: 'Cancelar', style: 'cancel', onPress: () => console.log(false) },
+        ]);
+    }
+
+    const HandleChangeText = (name, value) => {
+        setProduct({ ...product, [name]: value });
+    };
+
+    const updateProduct = async (id) => {
+        await updateDoc(doc(db, 'Product', id), product);
         props.navigation.navigate('listProducts')
+    }
+
+    if (loading) {
+        return (
+            <View style={{ marginTop: '80%', marginLeft: 'auto', marginRight: 'auto' }}>
+                <Text style={{ marginBottom: 15, fontSize: 20 }}>CARGANDO...</Text>
+                <ActivityIndicator size={70} color='#871F1F' style={{ marginTop: 15 }} />
+            </View>
+        )
     }
 
 
@@ -54,16 +85,43 @@ export default function MostrarProducto(props) {
                 <Text style={styles.subtitulo}>A continuacion, se mostrará la infromacion del producto seleccionado</Text>
                 <View style={styles.caracP}>
 
-                    <Text style={styles.productName}>Nombre Producto: {product.nombreCompleto} </Text>
-                    <Text style={styles.productName}>Codigo Producto: {product.codigo} </Text>
-                    <Text style={styles.productName}>Cantidad: {product.cantidad} </Text>
-                    <Text style={styles.productName}>Fecha caducidad: {product.fcadu} </Text>
+                    <TextInput
+                        value={product.nombreCompleto}
+                        keyboardType="ascii-capable"
+                        placeholder="Nombre Producto"
+                        style={styles.inputTxt}
+                        onChangeText={(value) => HandleChangeText("nombreCompleto", value)}
+                    />
+                    <TextInput
+                        value={product.codigo}
+                        keyboardType="ascii-capable"
+                        placeholder="Codigo Producto"
+                        style={styles.inputTxt}
+                        onChangeText={(value) => HandleChangeText("codigo", value)}
+
+                    />
+                    <TextInput
+                        value={product.cantidad}
+                        keyboardType="ascii-capable"
+                        placeholder="Cantidad Producto"
+                        style={styles.inputTxt}
+                        onChangeText={(value) => HandleChangeText("cantidad", value)}
+
+                    />
+                    <TextInput
+                        value={product.fcadu}
+                        keyboardType="ascii-capable"
+                        placeholder="Fecha Caducacion"
+                        style={styles.inputTxt}
+                        onChangeText={(value) => HandleChangeText("fcadu", value)}
+
+                    />
                 </View>
 
                 <View style={styles.productItem}>
                     <TouchableOpacity>
                         <MaterialCommunityIcons name="delete" color={"red"} size={35} style={{ marginLeft: 16, top: 30 }}
-                            onPress={() => eliminarProducto(props.route.params.ProductsId)}
+                            onPress={() => aviso(props.route.params.ProductsId)}
                         />
                         <Text style={styles.productName}> Eliminar</Text>
                     </TouchableOpacity>
@@ -71,7 +129,7 @@ export default function MostrarProducto(props) {
 
                     <TouchableOpacity>
                         <MaterialCommunityIcons name="reload" color={"green"} size={35} style={{ marginLeft: 25, top: 30 }}
-                            onPress={() => actualizarProducto(props.route.params.ProductsId)}
+                            onPress={() => updateProduct(props.route.params.ProductsId)}
                         />
                         <Text style={styles.productName}> Actualizar</Text>
                     </TouchableOpacity>
@@ -82,7 +140,6 @@ export default function MostrarProducto(props) {
                 </TouchableOpacity>
 
             </View>
-
         </View>
     );
 }
@@ -130,7 +187,7 @@ const styles = StyleSheet.create({
     caracP: {
         marginLeft: 8,
         marginBottom: 10,
-        
+
     },
 
     productName: {
@@ -146,7 +203,7 @@ const styles = StyleSheet.create({
         borderBottomStartRadius: 20,
         borderBottomEndRadius: 20,
         width: 370,
-        height: 435,
+        height: 'auto',
         marginRight: 'auto',
         marginLeft: 'auto',
         bottom: 70,
@@ -165,9 +222,9 @@ const styles = StyleSheet.create({
         marginLeft: "auto",
         marginTop: 20,
         borderRadius: 20,
-        top: 30,
-        marginTop: 'auto',
-        marginBottom: 16,
+
+        marginTop: 30,
+        marginBottom: 20,
         shadowColor: '#000',
         textShadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
@@ -187,5 +244,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginRight: 10,
         top: 30
+    },
+    inputTxt: {
+        borderColor: 'gray',
+        backgroundColor: "#D9D9D9",
+        width: 300,
+        height: 50,
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        top: 20,
+
     },
 });
