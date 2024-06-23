@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Image, Text, TouchableOpacity, StyleSheet,Alert } from "react-native";
 import { TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { ImageBackground } from 'react-native';
@@ -8,6 +8,7 @@ import { useState } from 'react';
 //import DB
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import app from "../AccesoFirebase";
+import { ScrollView } from "react-native-gesture-handler";
 
 const db = getFirestore(app)
 
@@ -31,9 +32,9 @@ export default function Crear() {
     }
 
     const RegistarUsuario = async () => {
-
         try {
             await addDoc(collection(db, 'User'), { ...estado })
+            Alert.alert('Registrado', 'Usuario registrado correctamente');
             navigation.navigate('home')
         } catch {
             console.error(error)
@@ -46,7 +47,7 @@ export default function Crear() {
             <Image source={require('../assets/imagenes/logo_fruit-sf.png')} style={styles.logo} />
 
             <View style={styles.card}>
-
+            <ScrollView>
                 <Text style={styles.titulo}>Crear cuenta nueva</Text>
 
                 <TextInput
@@ -88,6 +89,7 @@ export default function Crear() {
                 <TouchableOpacity onPress={RegistarUsuario}>
                     <Text style={styles.btnIniciarSesion}>Registrarse</Text>
                 </TouchableOpacity>
+                </ScrollView>
             </View>
 
         </View>
@@ -105,7 +107,8 @@ const styles = StyleSheet.create({
         borderTopEndRadius: 20,
         borderBottomStartRadius: 20,
         borderBottomEndRadius: 20,
-        zIndex: -1,        
+        zIndex: -1, 
+        height:300,
     },
 
     logo: {
@@ -117,7 +120,7 @@ const styles = StyleSheet.create({
     },
 
     card: {
-        marginTop: 'auto',
+        marginTop: 15,
         marginBottom: 50,
         backgroundColor: '#D9D9D9',
         borderTopStartRadius: 20,
@@ -128,7 +131,6 @@ const styles = StyleSheet.create({
         height: 435,
         marginRight: 'auto',
         marginLeft: 'auto',
-        bottom: 50,
     },
 
     titulo: {
@@ -172,9 +174,8 @@ const styles = StyleSheet.create({
         marginLeft: "auto",
         marginTop: 20,
         borderRadius: 20,
-        top: 30,
-        marginTop: 'auto',
-        marginBottom: 'auto',
+        marginTop: 30,
+        marginBottom: 20,
         shadowColor: '#000',
         textShadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,

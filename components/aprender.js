@@ -47,19 +47,25 @@ export default function ApiAprender() {
 
     //Se encarga de limpiar la busqueda y volver a cargar los datos
     const recargar = () => {
-        setBusqueda(''); 
-        getFrutas(); 
+        setBusqueda('');
+        getFrutas();
     };
     return (
         <View style={styles.container}>
 
             <View style={styles.productItem}>
+                <TouchableOpacity style={{ marginTop: 15, marginRight: 8 }} onPress={recargar}>
+                    <MaterialCommunityIcons name="heart" color={"#871F1F"} size={35} style={{ marginLeft: 10, top: 26, left: 12 }} />
+                    <Text style={styles.iconTXT}> Favoritos</Text>
+                </TouchableOpacity>
+
                 <TextInput placeholder='Buscar Fruta' style={styles.inputTxt}
                     value={busqueda}
                     onChangeText={setBusqueda}
                 />
-                <TouchableOpacity  style={{ marginTop: 15,}} onPress={recargar}>
-                    <MaterialCommunityIcons name="reload" color={"green"} size={35} style={{ marginLeft: 10, top: 26, left:12 }} />
+
+                <TouchableOpacity style={{ marginTop: 15, marginLeft: 8 }} onPress={recargar}>
+                    <MaterialCommunityIcons name="reload" color={"green"} size={35} style={{ marginLeft: 10, top: 26, left: 12 }} />
                     <Text style={styles.iconTXT}> Recargar</Text>
                 </TouchableOpacity>
             </View>
@@ -68,16 +74,28 @@ export default function ApiAprender() {
 
             <View style={{ flex: 1 }}>
                 {isLoading ? (
-                    <ActivityIndicator />
+                    <View style={{ marginTop: '40%', marginLeft: 'auto', marginRight: 'auto' }}>
+                        <Text style={{ marginBottom: 15, fontSize: 20 }}>Cargando...</Text>
+                        <ActivityIndicator size={80} color='#871F1F' style={{ marginTop: 15 }} />
+                    </View>
                 ) : (
                     <FlatList
                         data={data}
                         keyExtractor={({ id }) => id.toString()}
                         renderItem={({ item }) => (
                             <View style={styles.card}>
-                                <Text style={styles.productName} >
-                                    {item.name}
+                                <Text style={styles.productName}
+                                    onPress={() => navigation.navigate('mostrarFruta', { fruit: item })}
+                                >{item.name}
                                 </Text>
+                                <TouchableOpacity style={{ flexDirection: 'row' }}>
+                                    <MaterialCommunityIcons name="heart" color={"#871F1F"} size={30} style={{ marginLeft: 8, right: 8, top: 2.5 }}
+                                        onPress={() => navigation.navigate('mostrarFruta', { fruit: item })} />
+
+                                    <MaterialCommunityIcons name="eye" color={"black"} size={30} style={{ marginLeft: 8, right: 8 }}
+                                        onPress={() => navigation.navigate('mostrarFruta', { fruit: item })} />
+                                </TouchableOpacity>
+
                             </View>
                         )}
                     />
@@ -132,6 +150,10 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         marginLeft: 'auto',
         borderRadius: 15,
+
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
     },
 
     btnIniciarSesion: {
@@ -162,14 +184,14 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         backgroundColor: "#D9D9D9",
         borderRadius: 15,
-        width: 250,
+        width: 220,
         height: 50,
         marginRight: 'auto',
         marginLeft: 'auto',
         marginTop: 60,
         marginBottom: 10,
         textAlign: 'justify',
-        padding:10
+        padding: 10
     },
 
     productItem: {
@@ -190,9 +212,11 @@ const styles = StyleSheet.create({
 
     iconTXT: {
         fontSize: 14,
-        marginRight: 10,
+        Right: 10,
+        Left: 10,
         padding: 10,
         top: 15
     },
+
 
 });

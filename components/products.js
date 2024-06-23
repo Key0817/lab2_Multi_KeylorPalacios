@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Image, Text, TouchableOpacity, StyleSheet,ScrollView,Alert } from "react-native";
 import { TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { ImageBackground } from 'react-native';
@@ -34,10 +34,10 @@ export default function Productos() {
 
         try {
             await addDoc(collection(db, 'Product'), { ...estado })
-
+            Alert.alert('Registrado', 'Prodcuto registrado correctamente');
             navigation.navigate('home')
 
-        } catch (error){
+        } catch (error) {
             console.error(error)
         }
     }
@@ -49,47 +49,48 @@ export default function Productos() {
             <Image source={require('../assets/imagenes/logo_fruit-sf.png')} style={styles.logo} />
 
             <View style={styles.card}>
+                <ScrollView>
+                    <Text style={styles.titulo}>Productos</Text>
+                    <TextInput
+                        onChangeText={(value) => HandleChangeText(value, 'nombreCompleto')}
+                        value={estado.nombreCompleto}
+                        keyboardType="ascii-capable"
+                        placeholder="Nombre Producto"
+                        style={styles.inputTxt}
+                        underlineColor="transparent"
+                    ></TextInput>
 
-                <Text style={styles.titulo}>Productos</Text>
-                <TextInput
-                    onChangeText={(value) => HandleChangeText(value, 'nombreCompleto')}
-                    value={estado.nombreCompleto}
-                    keyboardType="ascii-capable"
-                    placeholder="Nombre Producto"
-                    style={styles.inputTxt}
-                    underlineColor="transparent"
-                ></TextInput>
+                    <TextInput
+                        onChangeText={(value) => HandleChangeText(value, 'codigo')}
+                        value={estado.codigo}
+                        keyboardType="ascii-capable"
+                        placeholder="Código Producto"
+                        style={styles.inputTxt}
+                        underlineColor="transparent"
+                    ></TextInput>
 
-                <TextInput
-                    onChangeText={(value) => HandleChangeText(value, 'codigo')}
-                    value={estado.codigo}
-                    keyboardType="ascii-capable"
-                    placeholder="Código Producto"
-                    style={styles.inputTxt}
-                    underlineColor="transparent"
-                ></TextInput>
+                    <TextInput
+                        onChangeText={(value) => HandleChangeText(value, 'cantidad')}
+                        value={estado.cantidad}
+                        keyboardType="ascii-capable"
+                        placeholder="Cantidad"
+                        style={styles.inputTxt}
+                        underlineColor="transparent"
+                    ></TextInput>
 
-                <TextInput
-                    onChangeText={(value) => HandleChangeText(value, 'cantidad')}
-                    value={estado.cantidad}
-                    keyboardType="ascii-capable"
-                    placeholder="Cantidad"
-                    style={styles.inputTxt}
-                    underlineColor="transparent"
-                ></TextInput>
+                    <TextInput
+                        onChangeText={(value) => HandleChangeText(value, 'fcadu')}
+                        value={estado.fcadu}
+                        keyboardType="ascii-capable"
+                        placeholder="Fecha caducidad"
+                        style={styles.inputTxt}
+                        underlineColor="transparent"
+                    ></TextInput>
 
-                <TextInput
-                    onChangeText={(value) => HandleChangeText(value, 'fcadu')}
-                    value={estado.fcadu}
-                    keyboardType="ascii-capable"
-                    placeholder="Fecha caducidad"
-                    style={styles.inputTxt}
-                    underlineColor="transparent"
-                ></TextInput>
-
-                <TouchableOpacity onPress={RegistarProducto}>
-                    <Text style={styles.btnIniciarSesion}>Guardar</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={RegistarProducto}>
+                        <Text style={styles.btnIniciarSesion}>Guardar</Text>
+                    </TouchableOpacity>
+                </ScrollView>
             </View>
 
         </View>
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
         borderBottomStartRadius: 20,
         borderBottomEndRadius: 20,
         zIndex: -1,
+        height:300
     },
 
     logo: {
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     },
 
     card: {
-        marginTop: 'auto',
+        marginTop: 15,
         marginBottom: 50,
         backgroundColor: '#D9D9D9',
         borderTopStartRadius: 20,
@@ -130,7 +132,6 @@ const styles = StyleSheet.create({
         height: 435,
         marginRight: 'auto',
         marginLeft: 'auto',
-        bottom: 50,
     },
 
     titulo: {
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
 
     inputTxt: {
         shadowColor: '#000',
-        textShadowOffset: {width:0, height: 2},
+        textShadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
@@ -174,11 +175,10 @@ const styles = StyleSheet.create({
         marginLeft: "auto",
         marginTop: 20,
         borderRadius: 20,
-        top: 30,
-        marginTop: 'auto',
-        marginBottom: 'auto',
+        marginTop: 30,
+        marginBottom: 20,
         shadowColor: '#000',
-        textShadowOffset: {width:0, height: 2},
+        textShadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,

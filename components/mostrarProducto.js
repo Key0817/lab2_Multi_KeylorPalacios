@@ -60,6 +60,7 @@ export default function MostrarProducto(props) {
 
     const updateProduct = async (id) => {
         await updateDoc(doc(db, 'Product', id), product);
+        Alert.alert('Actualizado', `${product.nombreCompleto} se actualizadó correctamente`);
         props.navigation.navigate('listProducts')
     }
 
@@ -75,71 +76,74 @@ export default function MostrarProducto(props) {
 
     return (
         <View style={styles.container}>
+
             <ImageBackground source={require('../assets/imagenes/image2.png')} style={styles.background}></ImageBackground>
 
             <Image source={require('../assets/imagenes/logo_fruit-sf.png')} style={styles.logo} />
 
-
             <View style={styles.card} >
-                <Text style={styles.titulo}>Información del producto</Text>
-                <Text style={styles.subtitulo}>A continuacion, se mostrará la infromacion del producto seleccionado</Text>
-                <View style={styles.caracP}>
+                <ScrollView>
 
-                    <TextInput
-                        value={product.nombreCompleto}
-                        keyboardType="ascii-capable"
-                        placeholder="Nombre Producto"
-                        style={styles.inputTxt}
-                        onChangeText={(value) => HandleChangeText("nombreCompleto", value)}
-                    />
-                    <TextInput
-                        value={product.codigo}
-                        keyboardType="ascii-capable"
-                        placeholder="Codigo Producto"
-                        style={styles.inputTxt}
-                        onChangeText={(value) => HandleChangeText("codigo", value)}
+                    <Text style={styles.titulo}>Información del producto</Text>
+                    <Text style={styles.subtitulo}>A continuacion, se mostrará la infromacion del producto seleccionado</Text>
+                    <View style={styles.caracP}>
 
-                    />
-                    <TextInput
-                        value={product.cantidad}
-                        keyboardType="ascii-capable"
-                        placeholder="Cantidad Producto"
-                        style={styles.inputTxt}
-                        onChangeText={(value) => HandleChangeText("cantidad", value)}
-
-                    />
-                    <TextInput
-                        value={product.fcadu}
-                        keyboardType="ascii-capable"
-                        placeholder="Fecha Caducacion"
-                        style={styles.inputTxt}
-                        onChangeText={(value) => HandleChangeText("fcadu", value)}
-
-                    />
-                </View>
-
-                <View style={styles.productItem}>
-                    <TouchableOpacity>
-                        <MaterialCommunityIcons name="delete" color={"red"} size={35} style={{ marginLeft: 16, top: 30 }}
-                            onPress={() => aviso(props.route.params.ProductsId)}
+                        <TextInput
+                            value={product.nombreCompleto}
+                            keyboardType="ascii-capable"
+                            placeholder="Nombre Producto"
+                            style={styles.inputTxt}
+                            onChangeText={(value) => HandleChangeText("nombreCompleto", value)}
                         />
-                        <Text style={styles.productName}> Eliminar</Text>
-                    </TouchableOpacity>
+                        <TextInput
+                            value={product.codigo}
+                            keyboardType="ascii-capable"
+                            placeholder="Codigo Producto"
+                            style={styles.inputTxt}
+                            onChangeText={(value) => HandleChangeText("codigo", value)}
 
-
-                    <TouchableOpacity>
-                        <MaterialCommunityIcons name="reload" color={"green"} size={35} style={{ marginLeft: 25, top: 30 }}
-                            onPress={() => updateProduct(props.route.params.ProductsId)}
                         />
-                        <Text style={styles.productName}> Actualizar</Text>
+                        <TextInput
+                            value={product.cantidad}
+                            keyboardType="ascii-capable"
+                            placeholder="Cantidad Producto"
+                            style={styles.inputTxt}
+                            onChangeText={(value) => HandleChangeText("cantidad", value)}
+
+                        />
+                        <TextInput
+                            value={product.fcadu}
+                            keyboardType="ascii-capable"
+                            placeholder="Fecha Caducacion"
+                            style={styles.inputTxt}
+                            onChangeText={(value) => HandleChangeText("fcadu", value)}
+
+                        />
+                    </View>
+
+                    <View style={styles.productItem}>
+                        <TouchableOpacity>
+                            <MaterialCommunityIcons name="delete" color={"red"} size={35} style={{ marginLeft: 16, top: 30 }}
+                                onPress={() => aviso(props.route.params.ProductsId)}
+                            />
+                            <Text style={styles.productName}> Eliminar</Text>
+                        </TouchableOpacity>
+
+
+                        <TouchableOpacity>
+                            <MaterialCommunityIcons name="reload" color={"green"} size={35} style={{ marginLeft: 25, top: 30 }}
+                                onPress={() => updateProduct(props.route.params.ProductsId)}
+                            />
+                            <Text style={styles.productName}> Actualizar</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <TouchableOpacity onPress={() => navigation.navigate("listProducts")} style={{ marginTop: 30 }}>
+                        <Text style={styles.btnIniciarSesion}>Volver</Text>
                     </TouchableOpacity>
-                </View>
-
-                <TouchableOpacity onPress={() => navigation.navigate("listProducts")} style={{ marginTop: 30 }}>
-                    <Text style={styles.btnIniciarSesion}>Volver</Text>
-                </TouchableOpacity>
-
+                </ScrollView>
             </View>
+
         </View>
     );
 }
@@ -156,6 +160,7 @@ const styles = StyleSheet.create({
         borderBottomStartRadius: 20,
         borderBottomEndRadius: 20,
         zIndex: -1,
+        height:300
     },
 
     logo: {
@@ -195,18 +200,17 @@ const styles = StyleSheet.create({
     },
 
     card: {
-        marginTop: 'auto',
+        marginTop: 15,
         marginBottom: 50,
         backgroundColor: '#D9D9D9',
         borderTopStartRadius: 20,
         borderTopEndRadius: 20,
         borderBottomStartRadius: 20,
         borderBottomEndRadius: 20,
-        width: 370,
+        width: 340,
         height: 'auto',
         marginRight: 'auto',
         marginLeft: 'auto',
-        bottom: 70,
     },
 
     btnIniciarSesion: {
@@ -222,7 +226,6 @@ const styles = StyleSheet.create({
         marginLeft: "auto",
         marginTop: 20,
         borderRadius: 20,
-
         marginTop: 30,
         marginBottom: 20,
         shadowColor: '#000',
