@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
     Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View,
-    Pressable, ActivityIndicator, FlatList, ImageBackground
+    Pressable, ActivityIndicator, FlatList, ImageBackground, Alert
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+import { addDoc, collection, getFirestore, getDocs, deleteDoc, doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import app from "../AccesoFirebase";
 
 export default function ApiAprender() {
 
     const navigation = useNavigation();
+
+    const db = getFirestore(app)
 
     const [isLoading, setLoading] = useState(true);
     const [data, setData] = useState([]);
@@ -45,16 +49,37 @@ export default function ApiAprender() {
         }
     }, [busqueda]);
 
-    //Se encarga de limpiar la busqueda y volver a cargar los datos
     const recargar = () => {
         setBusqueda('');
         getFrutas();
     };
+
+    const agregarFavorito = async (fruta) => {
+        try {
+            const favoritosRef = collection(db, 'Favoritos');
+            const q = await getDocs(favoritosRef);
+            const isAlreadyFavorite = q.docs.some(doc => doc.data().id === fruta.id);
+
+            if (!isAlreadyFavorite) {
+                await addDoc(favoritosRef, fruta);
+                Alert.alert('Agregado!', `${fruta.name} se agregó a favoritos`);
+            } else {
+                Alert.alert('Ya existe', `${fruta.name} ya está en favoritos`);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
     return (
         <View style={styles.container}>
 
             <View style={styles.productItem}>
-                <TouchableOpacity style={{ marginTop: 15, marginRight: 8 }} onPress={recargar}>
+
+                <TouchableOpacity style={{ marginTop: 15, marginRight: 8 }}
+                    onPress={() => navigation.navigate('favoritos')}
+                >
                     <MaterialCommunityIcons name="heart" color={"#871F1F"} size={35} style={{ marginLeft: 10, top: 26, left: 12 }} />
                     <Text style={styles.iconTXT}> Favoritos</Text>
                 </TouchableOpacity>
@@ -70,7 +95,7 @@ export default function ApiAprender() {
                 </TouchableOpacity>
             </View>
 
-            <Text style={styles.titulo}>Aprender</Text>
+            <Text style={styles.titulo}>Lista de Frutas</Text>
 
             <View style={{ flex: 1 }}>
                 {isLoading ? (
@@ -88,13 +113,13 @@ export default function ApiAprender() {
                                     onPress={() => navigation.navigate('mostrarFruta', { fruit: item })}
                                 >{item.name}
                                 </Text>
-                                <TouchableOpacity style={{ flexDirection: 'row' }}>
+                                <View style={{ flexDirection: 'row' }}>
                                     <MaterialCommunityIcons name="heart" color={"#871F1F"} size={30} style={{ marginLeft: 8, right: 8, top: 2.5 }}
-                                        onPress={() => navigation.navigate('mostrarFruta', { fruit: item })} />
+                                        onPress={() => agregarFavorito(item)} />
 
                                     <MaterialCommunityIcons name="eye" color={"black"} size={30} style={{ marginLeft: 8, right: 8 }}
                                         onPress={() => navigation.navigate('mostrarFruta', { fruit: item })} />
-                                </TouchableOpacity>
+                                </View>
 
                             </View>
                         )}
